@@ -3,6 +3,17 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-    <h1>From HomeController</h1>
-    <a href="{{ path('app_logout') }}">Wyloguj</a>
+    <div class="row">
+        <div class="col">
+            <div class="border border-light mt-5">
+                <h1 class="">
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <a href="{{ path('chat') }}" class="text-white nav-link">Aplikacja CHAT</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="text-white nav-link">Aplikacja CHAT</a>
+                    {% endif %}    
+                </h1>
+            </div>
+        </div>
+    </div>
 {% endblock %}

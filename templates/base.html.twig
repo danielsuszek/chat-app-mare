@@ -9,8 +9,28 @@
             <link rel="stylesheet" href="{{ asset('css/main.css') }}">
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="bg-dark text-white w-75 mx-auto">
+        <header class="bg-success text-white text-center py-5">
+            <h1 class="h1">Chat application Mare</h1>
+        </header>
+        <nav class="navbar">
+            <ul class="navbar-nav">
+                <li><a href="{{ path('home') }}" class="nav-link text-white">Home</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li class="nav-item">
+                        <a href="{{ path('app_logout') }}" class="nav-link text-white mr-4">Wyloguj</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{{ path('app_login') }}" class="nav-link text-white mr-4">Zaloguj</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% block body %}
+        {% endblock %}
         {% block javascripts %}
             <script src={{ asset('js/main.js') }}></script>
         {% endblock %}
