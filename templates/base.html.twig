@@ -13,10 +13,8 @@
         <header class="bg-success text-white text-center py-5">
             <h1 class="h1">Chat application Mare</h1>
         </header>
-        <nav class="navbar">
-            <ul class="navbar-nav">
-                <li><a href="{{ path('home') }}" class="nav-link text-white">Główna</a></li>
-            </ul>
+        <nav class="navbar navbar-expand-md border-bottom border-light">
+            <a href="{{ path('home') }}" class="navbar-brand text-white">Główna</a>
             <ul class="navbar-nav">
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li class="nav-item">
@@ -24,7 +22,10 @@
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a href="{{ path('app_login') }}" class="nav-link text-white mr-4">Zaloguj</a>
+                        <a href="{{ path('app_login') }}" class="nav-link text-white ml-0">Zaloguj</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('register') }}" class="nav-link text-white mr-0">Rejestracja</a>
                     </li>
                 {% endif %}
             </ul>
