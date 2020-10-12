@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Conversation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * @method Conversation|null find($id, $lockMode = null, $lockVersion = null)
@@ -48,6 +49,29 @@ class ConversationRepository extends ServiceEntityRepository
 //        // SHOW SQL: 
 //        dump($query->getSQL());
 //        dump($query->getParameters());
+    }
+    // check query in /SQL folder
+    public function findConversationsByUser(int $userId) {
+        $qb = $this->createQueryBuilder('c');
+        dump($userId);
+        $qb->
+            select('otherUser.username', 'c.id AS conversationId', 'lm.content', 'lm.createdAt')
+            ->innerJoin('c.participants', 'p', Join::WITH,
+                    $qb->expr()->neq('p.user', ':user'))
+            ->innerJoin('c.participants', 'me', Join::WITH,
+                    $qb->expr()->eq('me.user', ':user'))
+            ->leftJoin('c.lastMessage', 'lm')
+            ->innerJoin('me.user', 'meUser')
+            ->innerJoin('p.user', 'otherUser')
+            ->where('meUser.id = :user')
+            ->setParameter('user', $userId)
+            ->orderBy('lm.createdAt', 'DESC')
+        ;           
+//        $query=$qb->getQuery();
+//        // SHOW SQL: 
+//        dump($query->getSQL());die;
+        
+        return $qb->getQuery()->getResult();
     }
 
     // /**

@@ -2,19 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\Conversation;
-use App\Entity\Participant;
-use App\Repository\ConversationRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use App\Repository\ConversationRepository;
+use App\Entity\Conversation;
+use App\Entity\Participant;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/conversations", name="conversations.")
+ * @Route("/conversations", name="conversations_")
  */
 class ConversationController extends AbstractController
 {
@@ -84,7 +83,7 @@ class ConversationController extends AbstractController
             
             $this->entityManager->flush();
             $this->entityManager->commit();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->entityManager->rollback();
             throw $ex;
         }
@@ -93,6 +92,16 @@ class ConversationController extends AbstractController
         return $this->json([
             'id' => $conversation->getId()
         ], Response::HTTP_CREATED, [], []);
-
+    }
+    
+    /**
+     * @Route("/", name="getConversations", methods={"GET"})
+     * @return JsonResponse
+     */
+    public function getConversations() {
+        $conversations = $this->conversationRepository
+                ->findConversationsByUser($this->getUser()->getId());
+        
+        return $this->json($conversations);
     }
 }
